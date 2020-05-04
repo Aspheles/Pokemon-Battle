@@ -1,3 +1,6 @@
+import random
+
+
 class Pokemon:
     def __init__(self, name, energyType, maxHealth, health, attacks, weakness, resistance):
         self.name = name
@@ -17,7 +20,13 @@ class Pokemon:
 
     def apply_weakness(self, target):
         # checking attack and damage
-        chosenAttack = self.attacks[0]
+
+        # Get random attack from the list
+        index = len(self.attacks)
+        rnd = random.randint(0, index - 1)
+
+        # Assign the chosen attack and get the damage value
+        chosenAttack = self.attacks[rnd]
         damage = chosenAttack.damage
 
         # Checking Weakness
@@ -40,6 +49,7 @@ class Pokemon:
     def takeDamage(self, resistance, target):
         print(resistance)
         target.health -= resistance
+        print(target.health)
 
 
 class Attack:
