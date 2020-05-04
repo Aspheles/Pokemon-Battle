@@ -11,23 +11,32 @@ class Pokemon:
         self.weakness = weakness
         self.resistance = resistance
 
-    def fight(self, target):
-        print(self.name)
-        print(target.name)
-        damage = self.apply_weakness(target)
-        resistance = self.apply_resistance(target, damage)
-        target.takeDamage(resistance, target)
+    def fight(self, target, attack):
+
+        if(self.name == "Pikachu"):
+            if(attack == "Electric Ring"):
+                chosenAttack = self.attacks[0]
+            elif(attack == "Pika Punch"):
+                chosenAttack = self.attacks[1]
+            else:
+                print(attack + " Doesn't exist")
+
+        elif(self.name == "Charmeleon"):
+            if(attack == "Head Butt"):
+                chosenAttack = self.attacks[0]
+            elif(attack == "Flare"):
+                chosenAttack = self.attacks[1]
+            else:
+                print(attack + " Doesn't exist")
+
+        return chosenAttack
 
     def apply_weakness(self, target):
         # checking attack and damage
 
         # Get random attack from the list
-        index = len(self.attacks)
-        rnd = random.randint(0, index - 1)
-
-        # Assign the chosen attack and get the damage value
-        chosenAttack = self.attacks[rnd]
-        damage = chosenAttack.damage
+        # index = len(self.attacks)
+        # rnd = random.randint(0, index - 1)
 
         # Checking Weakness
         if(target.weakness.energyType == self.energyType.name):
@@ -47,9 +56,22 @@ class Pokemon:
             return 0
 
     def takeDamage(self, resistance, target):
-        print(resistance)
-        target.health -= resistance
-        print(target.health)
+        if(target.health > 0):
+            print(resistance)
+            target.health -= resistance
+        else:
+            print(target.name + "Already dead")
+
+        return target.health
+
+    def getPopulation(self, target):
+        print(self.name)
+        print(target.name)
+
+        # if(self.health > 0 and target.health > 0):
+        #     damage = self.apply_weakness(target)
+        #     resistance = self.apply_resistance(target, damage)
+        #     target.takeDamage(resistance, target)
 
 
 class Attack:
@@ -88,5 +110,5 @@ Charmeleon = Pokemon("Charmeleon", EnergyType("Fire"), 60,
                      60, [Attack("Head Butt", 10), Attack("Flare", 30)], Weakness("Water", 2), Resistance("Lightning", 10))
 
 
-Pikachu.fight(Charmeleon)
+Pikachu.fight(Charmeleon, "Electric Ring")
 # Pokemon.fight(Pikachu, Charmeleon)
