@@ -1,5 +1,5 @@
 import random
-
+import gc # Garbage collector for bruteforcing the count of instances of Pokemon
 
 class Pokemon:
     def __init__(self, name, energyType, maxHealth, health, attacks, weakness, resistance):
@@ -15,12 +15,13 @@ class Pokemon:
         #Checks for the pokemon
         if(self.name == "Pikachu"):
             if(attack == "Electric Ring"):
-                attack = self.attacks[0]
+                    attack = self.attacks[0]
             elif(attack == "Pika Punch"):
-                attack = self.attacks[1]
+                    attack = self.attacks[1]
             else:
                 print(attack + " Doesn't exist")
                 return 0
+
         elif(self.name == "Charmeleon"):
             if(attack == "Head Butt"):
                 attack = self.attacks[0]
@@ -29,7 +30,7 @@ class Pokemon:
             else:
                 print(attack + " Doesn't exist")
                 return 0
-        return attack.damage
+        return attack.damage      
 
 
     def take_damage(self, damage, resistance, weakness):
@@ -60,13 +61,13 @@ class EnergyType:
         self.name = name
 
 
-class Weakness(EnergyType):
+class Weakness():
     def __init__(self, energyType, multiplier):
         self.energyType = energyType
         self.multiplier = multiplier
 
 
-class Resistance(EnergyType):
+class Resistance():
     def __init__(self, energyType, value):
         self.energyType = energyType
         self.value = value
@@ -92,7 +93,7 @@ class Battle:
 
 
 Pikachu = Pokemon("Pikachu", EnergyType("Lightning"), 60,
-                  60, [Attack("Electric Ring", 50), Attack("Pika Punch", 20)], Weakness("Fire", 1.5), Resistance("Fire", 20))
+                  60, [Attack("Electric Ring", 50), Attack("Pika Punch", 20)], Weakness("Fire", 1.5), Resistance("Fighting", 20))
 
 Charmeleon = Pokemon("Charmeleon", EnergyType("Fire"), 60,
                      60, [Attack("Head Butt", 10), Attack("Flare", 30)], Weakness("Water", 2), Resistance("Lightning", 10))
@@ -100,3 +101,24 @@ Charmeleon = Pokemon("Charmeleon", EnergyType("Fire"), 60,
 
 battle = Battle(Pikachu, Charmeleon)
 print(battle)
+
+class Status:
+    #staticmethode because no __init__, self
+    @staticmethod
+    def getPopulation():
+        alive_pokemons = []
+        for item in gc.get_objects():
+         #Checking if item is pokemon
+         if(isinstance(item, Pokemon)):
+             #Checking if pokemon has more than 0 hp
+             if(item.health > 0):
+                 #Add pokemon to array
+                 txt = "Name: {}, Health: {}"
+                 alive_pokemons.append(txt.format(item.name, item.health))
+
+        return alive_pokemons
+
+
+check_alive_pokemons = Status
+#print pokemon_list
+print(check_alive_pokemons.getPopulation())
