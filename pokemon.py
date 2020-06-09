@@ -11,68 +11,43 @@ class Pokemon:
         self.weakness = weakness
         self.resistance = resistance
 
-    def fight(self, target, attack):
-
+    def attack(self, attack):
+        #Checks for the pokemon
         if(self.name == "Pikachu"):
             if(attack == "Electric Ring"):
-                chosenAttack = self.attacks[0]
+                attack = self.attacks[0]
             elif(attack == "Pika Punch"):
-                chosenAttack = self.attacks[1]
+                attack = self.attacks[1]
             else:
                 print(attack + " Doesn't exist")
-
+                return 0
         elif(self.name == "Charmeleon"):
             if(attack == "Head Butt"):
-                chosenAttack = self.attacks[0]
+                attack = self.attacks[0]
             elif(attack == "Flare"):
-                chosenAttack = self.attacks[1]
+                attack = self.attacks[1]
             else:
                 print(attack + " Doesn't exist")
+                return 0
+        return attack.damage
 
-        return chosenAttack
 
-    def apply_weakness(self, target):
-        # checking attack and damage
-
-        # Get random attack from the list
-        # index = len(self.attacks)
-        # rnd = random.randint(0, index - 1)
-
-        # Checking Weakness
-        if(target.weakness.energyType == self.energyType.name):
-            damage = damage * target.weakness.multiplier
-            return damage
-        else:
-            return damage
-
-    def apply_resistance(self, target, damage):
-        if(target.resistance.energyType == self.energyType.name):
-            damage = damage - target.resistance.value
-
-            return damage
-        else:
-            print("{0} type pokemon can nott resist {1} type attack.".format(
-                self.energyType.name, target.resistance.energyType))
-            return 0
-
-    def takeDamage(self, resistance, target):
-        if(target.health > 0):
-            print(resistance)
-            target.health -= resistance
-        else:
-            print(target.name + "Already dead")
-
-        return target.health
-
-    def getPopulation(self, target):
-        print(self.name)
-        print(target.name)
-
-        # if(self.health > 0 and target.health > 0):
-        #     damage = self.apply_weakness(target)
-        #     resistance = self.apply_resistance(target, damage)
-        #     target.takeDamage(resistance, target)
-
+    def take_damage(self, damage, resistance, weakness):
+            # if Pokemon type is equal to the resistance type, use the resistance value and deduct that from the damage
+            # resistance in the parameters = Other pokemon type
+            if(self.resistance.energyType == resistance):
+                damage_with_resistance = damage - self.resistance.value
+                self.health = self.health - damage_with_resistance
+                return self.health
+            # if Pokemon type is equal to the weakness type, use the weakness multiplier and add that damage to the total
+            elif(resistance == self.weakness.energyType):
+                damage_with_multiplier = damage * self.weakness.multiplier
+                self.health = self.health - damage_with_multiplier
+                return self.health
+            # if there is no weakness or resistance, normal damage
+            self.health = self.health - damage
+            return self.health       
+            
 
 class Attack:
     def __init__(self, name, damage):
@@ -98,9 +73,22 @@ class Resistance(EnergyType):
 
 
 class Battle:
+    # Constructor of Fight class
     def __init__(self, pokemon1, pokemon2):
         self.pokemon1 = pokemon1
         self.pokemon2 = pokemon2
+
+    #Contains the construction of the battle in str so we can read the output
+    def __str__(self):
+        #print hp at start of Fight
+        print(
+            f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}")
+        # Electric ring attack
+        self.pokemon2.take_damage(self.pokemon1.attack("Electric Ring"), self.pokemon1.energyType, self.pokemon1.weakness)
+        #Flare attack
+        self.pokemon1.take_damage(self.pokemon2.attack("Flare"), self.pokemon2.energyType, self.pokemon2.weakness)
+        #return hp at end of Fight
+        return f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}"
 
 
 Pikachu = Pokemon("Pikachu", EnergyType("Lightning"), 60,
@@ -110,5 +98,5 @@ Charmeleon = Pokemon("Charmeleon", EnergyType("Fire"), 60,
                      60, [Attack("Head Butt", 10), Attack("Flare", 30)], Weakness("Water", 2), Resistance("Lightning", 10))
 
 
-Pikachu.fight(Charmeleon, "Electric Ring")
-# Pokemon.fight(Pikachu, Charmeleon)
+battle = Battle(Pikachu, Charmeleon)
+print(battle)
