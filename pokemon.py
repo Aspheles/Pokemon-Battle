@@ -11,26 +11,9 @@ class Pokemon:
         self.weakness = weakness
         self.resistance = resistance
 
+    #Takes attack damage and is used in take_damage to be calculated
     def attack(self, attack):
-        #Checks for the pokemon
-        if(self.name == "Pikachu"):
-            if(attack == "Electric Ring"):
-                    attack = self.attacks[0]
-            elif(attack == "Pika Punch"):
-                    attack = self.attacks[1]
-            else:
-                print(attack + " Doesn't exist")
-                return 0
-
-        elif(self.name == "Charmeleon"):
-            if(attack == "Head Butt"):
-                attack = self.attacks[0]
-            elif(attack == "Flare"):
-                attack = self.attacks[1]
-            else:
-                print(attack + " Doesn't exist")
-                return 0
-        return attack.damage      
+        return attack.damage
 
 
     def take_damage(self, damage, resistance, weakness):
@@ -79,27 +62,43 @@ class Battle:
         self.pokemon1 = pokemon1
         self.pokemon2 = pokemon2
 
-    #Contains the construction of the battle in str so we can read the output
+     #Contains the construction of the battle in str so we can read the output
     def __str__(self):
         #print hp at start of Fight
         print(
             f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}")
         # Electric ring attack
-        self.pokemon2.take_damage(self.pokemon1.attack("Electric Ring"), self.pokemon1.energyType, self.pokemon1.weakness)
+        self.pokemon2.take_damage(self.pokemon1.attack(
+            self.pokemon1.attacks[0]), self.pokemon1.energyType, self.pokemon1.weakness)
         #Flare attack
-        self.pokemon1.take_damage(self.pokemon2.attack("Flare"), self.pokemon2.energyType, self.pokemon2.weakness)
+        self.pokemon1.take_damage(self.pokemon2.attack(
+            self.pokemon2.attacks[1]), self.pokemon2.energyType, self.pokemon2.weakness)
         #return hp at end of Fight
         return f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}"
 
 
-Pikachu = Pokemon("Pikachu", EnergyType("Lightning"), 60,
-                  60, [Attack("Electric Ring", 50), Attack("Pika Punch", 20)], Weakness("Fire", 1.5), Resistance("Fighting", 20))
-
-Charmeleon = Pokemon("Charmeleon", EnergyType("Fire"), 60,
-                     60, [Attack("Head Butt", 10), Attack("Flare", 30)], Weakness("Water", 2), Resistance("Lightning", 10))
 
 
-battle = Battle(Pikachu, Charmeleon)
+
+# Pikachu = Pokemon("Pikachu", EnergyType("Lightning"), 60,
+#                   60, [Attack("Electric Ring", 50), Attack("Pika Punch", 20)], Weakness("Fire", 1.5), Resistance("Fighting", 20))
+
+# Charmeleon = Pokemon("Charmeleon", EnergyType("Fire"), 60,
+#                      60, [Attack("Head Butt", 10), Attack("Flare", 30)], Weakness("Water", 2), Resistance("Lightning", 10))
+
+class Pikachu(Pokemon):
+    def __init__(self, name):
+      super().__init__(name, EnergyType("Lightning"), 60, 60,[Attack("Electric Ring", 50), Attack("Pika Punch", 20)], Weakness("Fire", 1.5), Resistance("Fighting", 20))
+
+class Charmeleon(Pokemon):
+    def __init__(self,name):
+        super().__init__(name, EnergyType("Fire"), 60, 60, [Attack("Head Butt", 10), Attack("Flare", 30)], Weakness("Water", 2), Resistance("Lightning", 10))
+
+
+spikachu = Pikachu('bob')
+scharmeleon = Charmeleon("tom")
+
+battle = Battle(spikachu, scharmeleon)
 print(battle)
 
 class Status:
