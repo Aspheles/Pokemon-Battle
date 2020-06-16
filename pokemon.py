@@ -12,10 +12,10 @@ class Pokemon:
         self.resistance = resistance
 
     #Takes attack damage and is used in take_damage to be calculated
-    def attack(self, attack):
-        return attack.damage
-
-
+    def attack(self, target, attack):
+        #Returns the damage, which is used for the calculation
+        target.take_damage(attack.damage, self.energyType, self.weakness)
+        
     def take_damage(self, damage, resistance, weakness):
             # if Pokemon type is equal to the resistance type, use the resistance value and deduct that from the damage
             # resistance in the parameters = Other pokemon type
@@ -30,7 +30,7 @@ class Pokemon:
                 return self.health
             # if there is no weakness or resistance, normal damage
             self.health = self.health - damage
-            return self.health       
+            return self.health      
             
 
 class Attack:
@@ -68,11 +68,9 @@ class Battle:
         print(
             f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}")
         # Electric ring attack
-        self.pokemon2.take_damage(self.pokemon1.attack(
-            self.pokemon1.attacks[0]), self.pokemon1.energyType, self.pokemon1.weakness)
+        self.pokemon1.attack(self.pokemon2, self.pokemon1.attacks[0])
         #Flare attack
-        self.pokemon1.take_damage(self.pokemon2.attack(
-            self.pokemon2.attacks[1]), self.pokemon2.energyType, self.pokemon2.weakness)
+        self.pokemon2.attack(self.pokemon1, self.pokemon2.attacks[1])
         #return hp at end of Fight
         return f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}"
 
@@ -119,5 +117,5 @@ class Status:
 
 
 check_alive_pokemons = Status
-#print pokemon_list
+#print pokemon
 print(check_alive_pokemons.getPopulation())
