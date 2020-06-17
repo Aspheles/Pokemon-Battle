@@ -1,5 +1,5 @@
 import random
-import gc # Garbage collector for bruteforcing the count of instances of Pokemon
+import gc 
 
 class Pokemon:
     def __init__(self, name, energyType, maxHealth, health, attacks, weakness, resistance):
@@ -11,24 +11,24 @@ class Pokemon:
         self.weakness = weakness
         self.resistance = resistance
 
+
     #Takes attack damage and is used in take_damage to be calculated
     def attack(self, target, attack):
         #Returns the damage, which is used for the calculation
-        target.take_damage(attack.damage, self.energyType, self.weakness)
+        target.take_damage(attack.damage, self.energyType)
         
-    def take_damage(self, damage, resistance, weakness):
-            # if Pokemon type is equal to the resistance type, use the resistance value and deduct that from the damage
-            # resistance in the parameters = Other pokemon type
-            if(self.resistance.energyType == resistance):
+    def take_damage(self, damage, energyType):
+            # checking resistance type with targets type
+            if(self.resistance.energyType == energyType.name):
                 damage_with_resistance = damage - self.resistance.value
                 self.health = self.health - damage_with_resistance
                 return self.health
-            # if Pokemon type is equal to the weakness type, use the weakness multiplier and add that damage to the total
-            elif(resistance == self.weakness.energyType):
+            # checking weakness type if it matches, applying the multiplier to the damage from the pokemon skill
+            elif(energyType.name == self.weakness.energyType):
                 damage_with_multiplier = damage * self.weakness.multiplier
                 self.health = self.health - damage_with_multiplier
                 return self.health
-            # if there is no weakness or resistance, normal damage
+            # return damage if nothing is matching
             self.health = self.health - damage
             return self.health      
             
@@ -50,8 +50,9 @@ class Weakness():
         self.multiplier = multiplier
 
 
-class Resistance():
+class Resistance(EnergyType):
     def __init__(self, energyType, value):
+        super()
         self.energyType = energyType
         self.value = value
 
@@ -62,27 +63,13 @@ class Battle:
         self.pokemon1 = pokemon1
         self.pokemon2 = pokemon2
 
-     #Contains the construction of the battle in str so we can read the output
-    def __str__(self):
         #print hp at start of Fight
-        print(
-            f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}")
-        # Electric ring attack
+        print(f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}")
+        # Pokemon1 which is Pikachu is using Electring ring on Pokemon2 (Charmaleon) the target
         self.pokemon1.attack(self.pokemon2, self.pokemon1.attacks[0])
-        #Flare attack
+        # Pokemon2 which is Charmaleon is using Flare on Pokemon1 (Pikachu) the target
         self.pokemon2.attack(self.pokemon1, self.pokemon2.attacks[1])
-        #return hp at end of Fight
-        return f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}"
-
-
-
-
-
-# Pikachu = Pokemon("Pikachu", EnergyType("Lightning"), 60,
-#                   60, [Attack("Electric Ring", 50), Attack("Pika Punch", 20)], Weakness("Fire", 1.5), Resistance("Fighting", 20))
-
-# Charmeleon = Pokemon("Charmeleon", EnergyType("Fire"), 60,
-#                      60, [Attack("Head Butt", 10), Attack("Flare", 30)], Weakness("Water", 2), Resistance("Lightning", 10))
+       
 
 class Pikachu(Pokemon):
     def __init__(self, name):
@@ -96,13 +83,10 @@ class Charmeleon(Pokemon):
 spikachu = Pikachu('bob')
 scharmeleon = Charmeleon("tom")
 
+#Battle takes 2 arguments of 2 Pokemon objects
 battle = Battle(spikachu, scharmeleon)
-print(battle)
 
-class Status:
-    #staticmethode because no __init__, self
-    @staticmethod
-    def getPopulation():
+def getPopulation():
         alive_pokemons = []
         for item in gc.get_objects():
          #Checking if item is pokemon
@@ -116,6 +100,4 @@ class Status:
         return alive_pokemons
 
 
-check_alive_pokemons = Status
-#print pokemon
-print(check_alive_pokemons.getPopulation())
+print(getPopulation())
