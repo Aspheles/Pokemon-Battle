@@ -15,9 +15,9 @@ class Pokemon:
     #Takes attack damage and is used in take_damage to be calculated
     def attack(self, target, attack):
         #Returns the damage, which is used for the calculation
-        target.take_damage(attack.damage, self.energyType)
+        target.damage_calculation(attack.damage, self.energyType)
         
-    def take_damage(self, damage, energyType):
+    def damage_calculation(self, damage, energyType):
             # checking resistance type with targets type
             if(self.resistance.energyType == energyType.name):
                 damage_with_resistance = damage - self.resistance.value
@@ -52,7 +52,6 @@ class Weakness():
 
 class Resistance(EnergyType):
     def __init__(self, energyType, value):
-        super()
         self.energyType = energyType
         self.value = value
 
