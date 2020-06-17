@@ -69,6 +69,10 @@ class Battle:
         self.pokemon1.attack(self.pokemon2, self.pokemon1.attacks[0])
         # Pokemon2 which is Charmaleon is using Flare on Pokemon1 (Pikachu) the target
         self.pokemon2.attack(self.pokemon1, self.pokemon2.attacks[1])
+
+        #print result of battle
+        print(f"Pikachu HP: {round(self.pokemon1.health)}, Charmeleon HP: {round(self.pokemon2.health)}")
+
        
 
 class Pikachu(Pokemon):
@@ -95,7 +99,7 @@ def getPopulation():
              if(item.health > 0):
                  #Add pokemon to array
                  txt = "Name: {}, Health: {}"
-                 alive_pokemons.append(txt.format(item.name, item.health))
+                 alive_pokemons.append(txt.format(item.name, round(item.health)))
 
         return alive_pokemons
 
