@@ -62,18 +62,20 @@ class Battle:
         self.pokemon1 = pokemon1
         self.pokemon2 = pokemon2
 
-        #print hp at start of Fight
-        print(f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}")
-        # Pokemon1 which is Pikachu is using Electring ring on Pokemon2 (Charmaleon) the target
-        self.pokemon1.attack(self.pokemon2, self.pokemon1.attacks[0])
-        # Pokemon2 which is Charmaleon is using Flare on Pokemon1 (Pikachu) the target
-        self.pokemon2.attack(self.pokemon1, self.pokemon2.attacks[1])
+        if(isinstance(pokemon1, Pokemon) and isinstance(pokemon2, Pokemon)):
+            #print hp at start of Fight
+            print(f"Pikachu HP: {self.pokemon1.health}, Charmeleon HP: {self.pokemon2.health}")
+            # Pokemon1 which is Pikachu is using Electring ring on Pokemon2 (Charmaleon) the target
+            self.pokemon1.attack(self.pokemon2, self.pokemon1.attacks[0])
+            # Pokemon2 which is Charmaleon is using Flare on Pokemon1 (Pikachu) the target
+            self.pokemon2.attack(self.pokemon1, self.pokemon2.attacks[1])
 
-        #print result of battle
-        print(f"Pikachu HP: {round(self.pokemon1.health)}, Charmeleon HP: {round(self.pokemon2.health)}")
-
-       
-
+            #print result of battle
+            print(f"Pikachu HP: {round(self.pokemon1.health)}, Charmeleon HP: {round(self.pokemon2.health)}")
+        else:
+            print(f"Arguments  {self.pokemon1} or {self.pokemon2} do not extend from Pokemon class")
+             
+        
 class Pikachu(Pokemon):
     def __init__(self, name):
       super().__init__(name, EnergyType("Lightning"), 60, 60,[Attack("Electric Ring", 50), Attack("Pika Punch", 20)], Weakness("Fire", 1.5), Resistance("Fighting", 20))
@@ -85,6 +87,8 @@ class Charmeleon(Pokemon):
 
 spikachu = Pikachu('bob')
 scharmeleon = Charmeleon("tom")
+
+test = Weakness("test1", 12)
 
 #Battle takes 2 arguments of 2 Pokemon objects
 battle = Battle(spikachu, scharmeleon)
@@ -100,7 +104,7 @@ def getPopulation():
                  txt = "Name: {}, Health: {}"
                  alive_pokemons.append(txt.format(item.name, round(item.health)))
 
-        return alive_pokemons
+        return print(alive_pokemons)
 
 
-print(getPopulation())
+getPopulation()
